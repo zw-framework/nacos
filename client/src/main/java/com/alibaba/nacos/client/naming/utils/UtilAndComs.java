@@ -31,6 +31,7 @@ public class UtilAndComs {
     
     public static String nacosUrlBase = webContext + "/v1/ns";
     
+    //服务注册API：   /nacos/v1/ns/instance
     public static String nacosUrlInstance = nacosUrlBase + "/instance";
     
     public static String nacosUrlService = nacosUrlBase + "/service";

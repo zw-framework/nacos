@@ -219,7 +219,7 @@ public class NamingProxy implements Closeable {
     
     /**
      * register a instance to service with specified instance properties.
-     *
+     * 配置参数，注册实例。
      * @param serviceName name of service
      * @param groupName   group of service
      * @param instance    instance to register
@@ -599,10 +599,13 @@ public class NamingProxy implements Closeable {
         }
         
         try {
+            // 服务注册： url=http://192.168.2.121:8848/nacos/v1/ns/instance
+            // com.alibaba.nacos.naming.controllers.InstanceController.register()
             HttpRestResult<String> restResult = nacosRestTemplate
                     .exchangeForm(url, header, Query.newInstance().initParams(params), body, method, String.class);
             end = System.currentTimeMillis();
-            
+
+            //Metrics数据采集
             MetricsMonitor.getNamingRequestMonitor(method, url, String.valueOf(restResult.getCode()))
                     .observe(end - start);
             

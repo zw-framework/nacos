@@ -79,7 +79,7 @@ import static com.alibaba.nacos.naming.misc.UtilsAndCommons.UPDATE_INSTANCE_META
  * @author nkorange
  */
 @RestController
-@RequestMapping(UtilsAndCommons.NACOS_NAMING_CONTEXT + "/instance")
+@RequestMapping(UtilsAndCommons.NACOS_NAMING_CONTEXT + "/instance")  // = /nacos/v1/ns/instance
 public class InstanceController {
     
     @Autowired
@@ -113,7 +113,7 @@ public class InstanceController {
     };
     
     /**
-     * Register new instance.
+     * Register new instance. ЗўЮёзЂВс
      *
      * @param request http request
      * @return 'ok' if success

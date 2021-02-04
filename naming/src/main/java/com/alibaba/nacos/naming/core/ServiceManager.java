@@ -797,7 +797,7 @@ public class ServiceManager implements RecordListener<Service> {
         } else {
             instanceMap = new HashMap<>(ips.length);
         }
-        
+        // 注册实例到集群
         for (Instance instance : ips) {
             if (!service.getClusterMap().containsKey(instance.getClusterName())) {
                 Cluster cluster = new Cluster(instance.getClusterName(), service);

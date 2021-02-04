@@ -25,16 +25,22 @@ import org.springframework.stereotype.Service;
 
 /**
  * Consistency delegate.
- *
+ * 代理类，通过它来确定是使用AP还是CP
  * @author nkorange
  * @since 1.0.0
  */
 @DependsOn("ProtocolManager")
 @Service("consistencyDelegate")
 public class DelegateConsistencyServiceImpl implements ConsistencyService {
-    
+
+    /**
+     * 持久一致性服务. CP
+     */
     private final PersistentConsistencyServiceDelegateImpl persistentConsistencyService;
-    
+
+    /**
+     * 临时一致性服务. AP
+     */
     private final EphemeralConsistencyService ephemeralConsistencyService;
     
     public DelegateConsistencyServiceImpl(PersistentConsistencyServiceDelegateImpl persistentConsistencyService,

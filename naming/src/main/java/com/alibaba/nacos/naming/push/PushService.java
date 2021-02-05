@@ -73,6 +73,7 @@ public class PushService implements ApplicationContextAware, ApplicationListener
     
     private static volatile ConcurrentMap<String, Receiver.AckEntry> ackMap = new ConcurrentHashMap<>();
     
+    // 缓存客户端信息，以便进行数据的推送
     private static ConcurrentMap<String, ConcurrentMap<String, PushClient>> clientMap = new ConcurrentHashMap<>();
     
     private static volatile ConcurrentMap<String, Long> udpSendTimeMap = new ConcurrentHashMap<>();

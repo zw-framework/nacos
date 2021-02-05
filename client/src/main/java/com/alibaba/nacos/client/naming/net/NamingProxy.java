@@ -385,7 +385,7 @@ public class NamingProxy implements Closeable {
     
     /**
      * Query instance list.
-     *
+     * 实例查询，获取服务提供者信息
      * @param serviceName service name
      * @param clusters    clusters
      * @param udpPort     udp port

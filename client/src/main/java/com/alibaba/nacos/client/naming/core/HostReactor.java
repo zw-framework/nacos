@@ -63,7 +63,8 @@ public class HostReactor implements Closeable {
     private static final long UPDATE_HOLD_INTERVAL = 5000L;
     
     private final Map<String, ScheduledFuture<?>> futureMap = new HashMap<String, ScheduledFuture<?>>();
-    
+
+    //缓存服务提供者信息。key= DEFAULT_GROUP@@nacos-dubbo-provider
     private final Map<String, ServiceInfo> serviceInfoMap;
     
     private final Map<String, Object> updatingMap;
@@ -311,12 +312,13 @@ public class HostReactor implements Closeable {
         
         ServiceInfo serviceObj = getServiceInfo0(serviceName, clusters);
         
-        if (null == serviceObj) {
+        if (null == serviceObj) { //缓存中不存在serviceName时，从注册中心获取
             serviceObj = new ServiceInfo(serviceName, clusters);
             
             serviceInfoMap.put(serviceObj.getKey(), serviceObj);
             
             updatingMap.put(serviceName, new Object());
+            // 获取服务，更新serviceInfoMap
             updateServiceNow(serviceName, clusters);
             updatingMap.remove(serviceName);
             

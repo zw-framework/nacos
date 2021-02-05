@@ -123,7 +123,7 @@ public class InstanceController {
     };
     
     /**
-     * Register new instance. ����ע��
+     * Register new instance. 服务注册
      *
      * @param request http request
      * @return 'ok' if success
@@ -374,7 +374,7 @@ public class InstanceController {
     
     /**
      * Get all instance of input service.
-     *
+     * 获取服务实例。如果客户端支持推送，服务端会定时将服务实例进行推送
      * @param request http request
      * @return list of instance
      * @throws Exception any error during list
@@ -639,7 +639,8 @@ public class InstanceController {
         
         return instance;
     }
-    
+
+    //检查服务是否可用
     private void checkIfDisabled(Service service) throws Exception {
         if (!service.getEnabled()) {
             throw new Exception("service is disabled now.");
@@ -668,13 +669,14 @@ public class InstanceController {
         
         ClientInfo clientInfo = new ClientInfo(agent);
         ObjectNode result = JacksonUtils.createEmptyJsonNode();
+        // 从缓存获取服务
         Service service = serviceManager.getService(namespaceId, serviceName);
         long cacheMillis = switchDomain.getDefaultCacheMillis();
         
         // now try to enable the push
         try {
             if (udpPort > 0 && pushService.canEnablePush(agent)) {
-                
+                //当客户端支持服务的推送时，缓存客户端信息。服务端会定时将数据推送给客户端
                 pushService
                         .addClient(namespaceId, serviceName, clusters, agent, new InetSocketAddress(clientIP, udpPort),
                                 pushDataSource, tid, app);
@@ -707,7 +709,8 @@ public class InstanceController {
         if (service.getSelector() != null && StringUtils.isNotBlank(clientIP)) {
             srvedIPs = service.getSelector().select(clientIP, srvedIPs);
         }
-        
+
+        // 服务实例不存在
         if (CollectionUtils.isEmpty(srvedIPs)) {
             
             if (Loggers.SRV_LOG.isDebugEnabled()) {
@@ -746,7 +749,8 @@ public class InstanceController {
         }
         
         double threshold = service.getProtectThreshold();
-        
+
+        // 自我保护机制。如果健康的实例百分比小于threshold，则将不健康的实例也返回给客户端
         if ((float) ipMap.get(Boolean.TRUE).size() / srvedIPs.size() <= threshold) {
             
             Loggers.SRV_LOG.warn("protect threshold reached, return all ips, service: {}", serviceName);
@@ -766,7 +770,8 @@ public class InstanceController {
         }
         
         ArrayNode hosts = JacksonUtils.createEmptyArrayNode();
-        
+
+        // 封装服务实例信息
         for (Map.Entry<Boolean, List<Instance>> entry : ipMap.entrySet()) {
             List<Instance> ips = entry.getValue();
             
@@ -821,6 +826,7 @@ public class InstanceController {
         result.put("useSpecifiedURL", false);
         result.put("clusters", clusters);
         result.put("env", env);
+        // 服务实例元数据
         result.replace("metadata", JacksonUtils.transferToJsonNode(service.getMetadata()));
         return result;
     }

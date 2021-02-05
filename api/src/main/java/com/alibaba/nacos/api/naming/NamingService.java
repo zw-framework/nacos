@@ -28,6 +28,10 @@ import java.util.List;
 /**
  * Naming Service.
  *
+ * registerInstance：服务注册
+ *
+ * getAllInstances：服务发现
+ *
  * @author nkorange
  */
 public interface NamingService {

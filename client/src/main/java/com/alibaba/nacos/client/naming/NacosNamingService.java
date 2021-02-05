@@ -289,7 +289,16 @@ public class NacosNamingService implements NamingService {
             throws NacosException {
         return getAllInstances(serviceName, Constants.DEFAULT_GROUP, clusters, subscribe);
     }
-    
+
+    /**
+     * 服务发现
+     * @param serviceName name of service
+     * @param groupName   group of service
+     * @param clusters    list of cluster
+     * @param subscribe   if subscribe the service
+     * @return
+     * @throws NacosException
+     */
     @Override
     public List<Instance> getAllInstances(String serviceName, String groupName, List<String> clusters,
             boolean subscribe) throws NacosException {

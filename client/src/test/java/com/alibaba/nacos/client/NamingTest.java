@@ -57,6 +57,7 @@ public class NamingTest {
         
         ThreadUtils.sleep(5000L);
         
+        // 服务发现
         //获取指定名称服务的所有实例集合
         List<Instance> list = namingService.getAllInstances("nacos.test.1");
         

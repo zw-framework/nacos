@@ -55,7 +55,7 @@ import java.util.zip.GZIPOutputStream;
 
 /**
  * Push service.
- *
+ *  服务端推送
  * @author nacos
  */
 @Component
@@ -117,6 +117,8 @@ public class PushService implements ApplicationContextAware, ApplicationListener
         this.applicationContext = applicationContext;
     }
     
+    // 获取服务改变事件通知。通过UDP协议发送通知给客户端。客户端在PushReceiver中接收
+    // HealthController、ClientBeatCheckTask等地方会发送。PushService.serviceChanged()
     @Override
     public void onApplicationEvent(ServiceChangeEvent event) {
         Service service = event.getService();
@@ -135,7 +137,7 @@ public class PushService implements ApplicationContextAware, ApplicationListener
                 Map<String, Object> cache = new HashMap<>(16);
                 long lastRefTime = System.nanoTime();
                 for (PushClient client : clients.values()) {
-                    if (client.zombie()) {
+                    if (client.zombie()) { //客户端UDP协议失效
                         Loggers.PUSH.debug("client is zombie: " + client.toString());
                         clients.remove(client.toString());
                         Loggers.PUSH.debug("client is zombie: " + client.toString());

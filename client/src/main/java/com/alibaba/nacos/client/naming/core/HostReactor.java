@@ -336,7 +336,8 @@ public class HostReactor implements Closeable {
                 }
             }
         }
-        
+
+        // 添加定时任务，刷新serviceName
         scheduleUpdateIfAbsent(serviceName, clusters);
         
         return serviceInfoMap.get(serviceObj.getKey());
@@ -365,7 +366,7 @@ public class HostReactor implements Closeable {
             if (futureMap.get(ServiceInfo.getKey(serviceName, clusters)) != null) {
                 return;
             }
-            
+            // 添加定时任务，刷新serviceName
             ScheduledFuture<?> future = addTask(new UpdateTask(serviceName, clusters));
             futureMap.put(ServiceInfo.getKey(serviceName, clusters), future);
         }
@@ -373,7 +374,7 @@ public class HostReactor implements Closeable {
     
     /**
      * Update service now.
-     *
+     * 刷新serviceInfoMap
      * @param serviceName service name
      * @param clusters    clusters
      */
@@ -458,6 +459,7 @@ public class HostReactor implements Closeable {
                 ServiceInfo serviceObj = serviceInfoMap.get(ServiceInfo.getKey(serviceName, clusters));
                 
                 if (serviceObj == null) {
+                    // 更新serviceInfoMap信息
                     updateService(serviceName, clusters);
                     return;
                 }
@@ -468,6 +470,7 @@ public class HostReactor implements Closeable {
                 } else {
                     // if serviceName already updated by push, we should not override it
                     // since the push data may be different from pull through force push
+                    // 仅向服务端发起请求，用于更新服务器数据。不处理返回值
                     refreshOnly(serviceName, clusters);
                 }
                 
@@ -489,6 +492,7 @@ public class HostReactor implements Closeable {
                 incFailCount();
                 NAMING_LOGGER.warn("[NA] failed to update serviceName: " + serviceName, e);
             } finally {
+                // 定时调用UpdateTask，更新serviceName服务信息
                 executor.schedule(this, Math.min(delayTime << failCount, DEFAULT_DELAY * 60), TimeUnit.MILLISECONDS);
             }
         }

@@ -47,7 +47,7 @@ public class HealthCheckReactor {
     
     /**
      * Schedule client beat check task with a delay.
-     *
+     * 心跳检测。服务端向客户端定时发起
      * @param task client beat check task
      */
     public static void scheduleCheck(ClientBeatCheckTask task) {

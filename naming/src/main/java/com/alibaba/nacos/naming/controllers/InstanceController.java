@@ -141,6 +141,8 @@ public class InstanceController {
         
         final Instance instance = parseInstance(request);
         
+        //1. 进行服务注册
+        //2. 进行健康检测HealthCheckReactor.scheduleCheck(clientBeatCheckTask);
         serviceManager.registerInstance(namespaceId, serviceName, instance);
         return "ok";
     }

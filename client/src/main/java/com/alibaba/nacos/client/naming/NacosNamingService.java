@@ -91,6 +91,7 @@ public class NacosNamingService implements NamingService {
         initLogName(properties);
         
         this.serverProxy = new NamingProxy(this.namespace, this.endpoint, this.serverList, properties);
+        //心跳检测
         this.beatReactor = new BeatReactor(this.serverProxy, initClientBeatThreadCount(properties));
         this.hostReactor = new HostReactor(this.serverProxy, beatReactor, this.cacheDir, isLoadCacheAtStart(properties),
                 isPushEmptyProtect(properties), initPollingThreadCount(properties));

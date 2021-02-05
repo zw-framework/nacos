@@ -88,6 +88,7 @@ public class ClientBeatCheckTask implements Runnable {
             
             // first set health status of instances:
             for (Instance instance : instances) {
+                // 心跳超时，设置实例健康状态为false，发布服务改变事件
                 if (System.currentTimeMillis() - instance.getLastBeat() > instance.getInstanceHeartBeatTimeOut()) {
                     if (!instance.isMarked()) {
                         if (instance.isHealthy()) {
@@ -97,6 +98,7 @@ public class ClientBeatCheckTask implements Runnable {
                                             instance.getIp(), instance.getPort(), instance.getClusterName(),
                                             service.getName(), UtilsAndCommons.LOCALHOST_SITE,
                                             instance.getInstanceHeartBeatTimeOut(), instance.getLastBeat());
+                            //发布ServiceChangeEvent
                             getPushService().serviceChanged(service);
                             ApplicationUtils.publishEvent(new InstanceHeartbeatTimeoutEvent(this, instance));
                         }
